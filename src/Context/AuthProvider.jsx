@@ -5,10 +5,14 @@ import {
   getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
 } from "firebase/auth";
 import app from "../Firebase/firebase.config";
 import { set } from "react-hook-form";
+import { GoogleAuthProvider } from "firebase/auth";
+
+const GoogleProvider = new GoogleAuthProvider();
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext();
@@ -18,18 +22,23 @@ function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   const createNewUser = (email, password) => {
-    // setLoading(true);
+    setLoading(true);
     return createUserWithEmailAndPassword(Auth, email, password);
   };
 
   const userSignOut = () => {
-    // setLoading(true);
+    setLoading(true);
     return signOut(Auth);
   };
 
   const userSignIn = (email, password) => {
-    // setLoading(true);
+    setLoading(true);
     return signInWithEmailAndPassword(Auth, email, password);
+  };
+
+  const userGoogleSignIn = () => {
+    setLoading(true);
+    return signInWithPopup(Auth, GoogleProvider);
   };
 
   const authInfo = {
@@ -39,6 +48,7 @@ function AuthProvider({ children }) {
     createNewUser,
     userSignOut,
     userSignIn,
+    userGoogleSignIn,
   };
 
   useEffect(() => {

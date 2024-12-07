@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import { useForm } from "react-hook-form";
@@ -6,12 +6,13 @@ import { useContext } from "react";
 import { AuthContext } from "../Context/AuthProvider";
 
 function SignIn() {
-  const { setUser, userSignIn } = useContext(AuthContext);
+  const { setUser, userSignIn, userGoogleSignIn } = useContext(AuthContext);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
 
   const onSubmit = (data) => {
@@ -20,6 +21,19 @@ function SignIn() {
       .then((result) => {
         console.log(result.user);
         setUser(result.user);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
+  const handleGoogleSignIn = () => {
+    userGoogleSignIn()
+      .then((result) => {
+        console.log(result.user);
+        setUser(result.user);
+        navigate("/");
       })
       .catch((error) => {
         console.log(error.message);
@@ -64,7 +78,9 @@ function SignIn() {
             </label>
           </div>
           <div className="form-control mt-6">
-            <button className="btn btn-primary">Login</button>
+            <button className="btn btn-primary" disabled={isSubmitting}>
+              Login
+            </button>
           </div>
         </form>
         <div className="text-center">
@@ -77,7 +93,10 @@ function SignIn() {
         </div>
         <div className="divider px-8">OR</div>
         <div className="px-8 mb-8">
-          <button className="btn btn-primary w-full">
+          <button
+            className="btn btn-primary w-full"
+            onClick={handleGoogleSignIn}
+          >
             Sign in with <FaGoogle className="text-xl" />
           </button>
           <button className="btn btn-primary w-full mt-2">

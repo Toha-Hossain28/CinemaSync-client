@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars */
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { useContext } from "react";
 import { AuthContext } from "../Context/AuthProvider";
 function SignUp() {
-  const { createNewUser, setUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const { createNewUser, setUser, userGoogleSignIn } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -21,6 +22,19 @@ function SignUp() {
       .then((result) => {
         console.log(result.user);
         setUser(result.user);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
+  const handleGoogleSignIn = () => {
+    userGoogleSignIn()
+      .then((result) => {
+        console.log(result.user);
+        setUser(result.user);
+        navigate("/");
       })
       .catch((error) => {
         console.log(error.message);
@@ -111,7 +125,10 @@ function SignUp() {
             </label>
           </div>
           <div className="form-control mt-6">
-            <button className="btn btn-primary lg:text-xl lg:font-bold text-base font-medium">
+            <button
+              className="btn btn-primary lg:text-xl lg:font-bold text-base font-medium"
+              disabled={isSubmitting}
+            >
               Sign Up
             </button>
           </div>
@@ -126,7 +143,10 @@ function SignUp() {
         </div>
         <div className="divider px-8">OR</div>
         <div className="px-8 mb-8">
-          <button className="btn btn-primary w-full">
+          <button
+            className="btn btn-primary w-full"
+            onClick={handleGoogleSignIn}
+          >
             Sign in with <FaGoogle className="text-xl" />
           </button>
           <button className="btn btn-primary w-full mt-2">

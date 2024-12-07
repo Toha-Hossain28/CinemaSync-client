@@ -2,12 +2,53 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import App from "./App.jsx";
+import MainLayout from "./layouts/MainLayout";
+import AuthLayout from "./layouts/AuthLayout";
+import SignIn from "./components/SignIn";
+import SignUp from "./components/SignUp";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <h1>Client side</h1>,
+    element: <MainLayout />,
+    errorElement: <div>404</div>,
+    children: [
+      {
+        path: "/",
+        element: <div>Home</div>,
+      },
+      {
+        path: "/movies",
+        element: <div>All Movies</div>,
+      },
+      {
+        path: "/addMovie",
+        element: <div>Add Movie</div>,
+      },
+      {
+        path: "/favoriteMovies",
+        element: <div>Favorite Movies</div>,
+      },
+      {
+        path: "/coming",
+        element: <div>Coming</div>,
+      },
+    ],
+  },
+  {
+    path: "/auth",
+    element: <AuthLayout />,
+    errorElement: <div>404</div>,
+    children: [
+      {
+        path: "/auth/signin",
+        element: <SignIn />,
+      },
+      {
+        path: "/auth/signup",
+        element: <SignUp />,
+      },
+    ],
   },
 ]);
 

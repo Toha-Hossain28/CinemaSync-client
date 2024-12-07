@@ -68,7 +68,7 @@ function Banner() {
     },
   ];
   return (
-    <div className="grid grid-cols-12 w-full px-14 pt-10 bg-black pb-10">
+    <div className="md:grid md:grid-cols-12 flex flex-col  w-full px-14 pt-10 bg-black pb-10">
       <div className="col-span-7 flex flex-col justify-center space-y-5">
         <h1 className="text-5xl font-bold">CinemaSync</h1>
         <p className="text-sm xl:w-4/5">
@@ -77,7 +77,7 @@ function Banner() {
           cinematic stories that inspire.
         </p>
       </div>
-      <div className="col-span-5 pl-4 flex justify-center items-center mt-10">
+      <div className="col-span-5 flex justify-center items-center mt-10">
         <div className="carousel carousel-center rounded-box  space-x-4">
           {movies.map((movie, index) => {
             return (

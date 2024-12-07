@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import Banner from "../Components/Banner";
 import FeaturedMovies from "../Components/FeaturedMovies";
 import NewsLetter from "../Components/NewsLetter";
+import TestimonialSection from "../Components/Testimonials";
 
 function MainLayout() {
   return (
@@ -19,6 +20,9 @@ function MainLayout() {
       </section>
       <section>
         <NewsLetter />
+      </section>
+      <section>
+        <TestimonialSection />
       </section>
       <section className="min-h-screen">
         <Outlet />

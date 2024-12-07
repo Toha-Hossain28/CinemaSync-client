@@ -7,6 +7,9 @@ import AuthLayout from "./layouts/AuthLayout";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import AuthProvider from "./Context/AuthProvider";
+import SecondLayout from "./Layouts/SecondLayout";
+import AddMovie from "./Components/AddMovie";
+import PrivateRoute from "./Routes/PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -22,10 +25,7 @@ const router = createBrowserRouter([
         path: "/movies",
         element: <div>All Movies</div>,
       },
-      {
-        path: "/addMovie",
-        element: <div>Add Movie</div>,
-      },
+
       {
         path: "/favoriteMovies",
         element: <div>Favorite Movies</div>,
@@ -33,6 +33,21 @@ const router = createBrowserRouter([
       {
         path: "/coming",
         element: <div>Coming</div>,
+      },
+    ],
+  },
+  {
+    path: "movies",
+    element: <SecondLayout />,
+    errorElement: <div>404</div>,
+    children: [
+      {
+        path: "addMovie",
+        element: (
+          <PrivateRoute>
+            <AddMovie />
+          </PrivateRoute>
+        ),
       },
     ],
   },

@@ -9,7 +9,7 @@ import {
   signOut,
 } from "firebase/auth";
 import app from "../Firebase/firebase.config";
-import { set } from "react-hook-form";
+// import { set } from "react-hook-form";
 import { GoogleAuthProvider } from "firebase/auth";
 
 const GoogleProvider = new GoogleAuthProvider();
@@ -54,6 +54,7 @@ function AuthProvider({ children }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(Auth, (currentUser) => {
       setUser(currentUser);
+      setLoading(false);
     });
     return () => {
       unsubscribe();

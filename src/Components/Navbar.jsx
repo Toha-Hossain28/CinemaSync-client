@@ -3,7 +3,13 @@ import { NavLink, Link } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
 
 function Navbar() {
-  const { user } = useContext(AuthContext);
+  const { user, userSignOut } = useContext(AuthContext);
+  // console.log(user);
+  const handleSignOut = () => {
+    userSignOut()
+      .then(() => {})
+      .catch((error) => console.log(error));
+  };
 
   return (
     <div>
@@ -85,7 +91,7 @@ function Navbar() {
           </Link>
           <div
             className={`tooltip tooltip-left z-20 ${user ? "" : "hidden"}`}
-            data-tip="hello"
+            data-tip={user?.email}
           >
             <div className="flex justify-center items-center gap-5">
               <div className="dropdown dropdown-end">
@@ -102,7 +108,9 @@ function Navbar() {
                   className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-36"
                 >
                   <li>
-                    <button className="btn btn-error">Logout</button>
+                    <button onClick={handleSignOut} className="btn btn-error">
+                      Sign Out
+                    </button>
                   </li>
                 </ul>
               </div>

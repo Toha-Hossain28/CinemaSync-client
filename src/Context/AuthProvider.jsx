@@ -4,6 +4,8 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 import app from "../Firebase/firebase.config";
 import { set } from "react-hook-form";
@@ -16,11 +18,28 @@ function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   const createNewUser = (email, password) => {
-    setLoading(true);
+    // setLoading(true);
     return createUserWithEmailAndPassword(Auth, email, password);
   };
 
-  const authInfo = { user, setUser, loading, createNewUser };
+  const userSignOut = () => {
+    // setLoading(true);
+    return signOut(Auth);
+  };
+
+  const userSignIn = (email, password) => {
+    // setLoading(true);
+    return signInWithEmailAndPassword(Auth, email, password);
+  };
+
+  const authInfo = {
+    user,
+    setUser,
+    loading,
+    createNewUser,
+    userSignOut,
+    userSignIn,
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(Auth, (currentUser) => {

@@ -1,7 +1,31 @@
 import { Link } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
+import { useForm } from "react-hook-form";
+import { useContext } from "react";
+import { AuthContext } from "../Context/AuthProvider";
+
 function SignIn() {
+  const { setUser, userSignIn } = useContext(AuthContext);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+    userSignIn(data.email, data.password)
+      .then((result) => {
+        console.log(result.user);
+        setUser(result.user);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
   return (
     <div className="w-full grid place-items-center py-10">
       <div className="card bg-base-100 lg:w-3/5 w-full shrink-0 shadow-2xl">
@@ -9,12 +33,13 @@ function SignIn() {
           <h2 className="lg:text-3xl font-bold text-lg">CinemaSync</h2>
           <p className="lg:text-2xl text-base">Sign in</p>
         </div>
-        <form className="card-body">
+        <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-control">
             <label className="label">
               <span className="label-text">Email</span>
             </label>
             <input
+              {...register("email")}
               type="email"
               placeholder="email"
               className="input input-bordered"
@@ -26,6 +51,7 @@ function SignIn() {
               <span className="label-text">Password</span>
             </label>
             <input
+              {...register("password")}
               type="password"
               placeholder="password"
               className="input input-bordered"

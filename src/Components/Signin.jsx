@@ -4,10 +4,10 @@ import { FaFacebookF } from "react-icons/fa";
 function SignIn() {
   return (
     <div className="w-full grid place-items-center py-10">
-      <div className="card bg-base-100 lg:w-2/5 w-full shrink-0 shadow-2xl">
+      <div className="card bg-base-100 lg:w-3/5 w-full shrink-0 shadow-2xl">
         <div className="flex items-center justify-center flex-col space-y-2">
-          <h2 className="text-3xl font-bold">CinemaSync</h2>
-          <p className="text-2xl ">Sign in</p>
+          <h2 className="lg:text-3xl font-bold text-lg">CinemaSync</h2>
+          <p className="lg:text-2xl text-base">Sign in</p>
         </div>
         <form className="card-body">
           <div className="form-control">
@@ -42,7 +42,7 @@ function SignIn() {
           </div>
         </form>
         <div className="text-center">
-          <p>
+          <p className="text-sm">
             Don&apos;t have an account?{" "}
             <Link to="/auth/signup" className="link link-hover text-accent">
               Sign up

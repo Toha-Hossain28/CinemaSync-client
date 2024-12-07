@@ -1,21 +1,47 @@
+/* eslint-disable no-unused-vars */
 import { Link } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
+import { useForm } from "react-hook-form";
+import { useContext } from "react";
+import { AuthContext } from "../Context/AuthProvider";
 function SignUp() {
+  const { createNewUser, setUser } = useContext(AuthContext);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    // e.preventDefault();
+    // console.log(data);
+    createNewUser(data.email, data.password)
+      .then((result) => {
+        console.log(result.user);
+        setUser(result.user);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
   return (
     <div className="w-full grid place-items-center py-10">
-      <div className="card bg-base-100 lg:w-2/5 w-full shrink-0 shadow-2xl">
+      <div className="card bg-base-100 lg:w-3/5 w-full shrink-0 shadow-2xl">
         <div className="flex items-center justify-center flex-col space-y-2">
-          <h2 className="text-3xl font-bold">CinemaSync</h2>
-          <p className="text-2xl ">Sign up</p>
+          <h2 className="lg:text-3xl text-lg  font-bold">CinemaSync</h2>
+          <p className="lg:text-2xl text-base">Sign up</p>
         </div>
-        <form className="card-body">
+        <form onSubmit={handleSubmit(onSubmit)} className="card-body">
           {/* name */}
           <div className="form-control">
             <label className="label">
               <span className="label-text">Email</span>
             </label>
             <input
+              {...register("name")}
               name="name"
               type="text"
               placeholder="Name"
@@ -29,6 +55,8 @@ function SignUp() {
               <span className="label-text">Email</span>
             </label>
             <input
+              {...register("username")}
+              name="username"
               type="text"
               placeholder="Username"
               className="input input-bordered"
@@ -41,6 +69,8 @@ function SignUp() {
               <span className="label-text">Email</span>
             </label>
             <input
+              {...register("photoURL")}
+              name="photoURL"
               type="text"
               placeholder="Photo URL"
               className="input input-bordered"
@@ -53,6 +83,8 @@ function SignUp() {
               <span className="label-text">Email</span>
             </label>
             <input
+              {...register("email")}
+              name="email"
               type="email"
               placeholder="email"
               className="input input-bordered"
@@ -65,6 +97,8 @@ function SignUp() {
               <span className="label-text">Password</span>
             </label>
             <input
+              {...register("password")}
+              name="password"
               type="password"
               placeholder="password"
               className="input input-bordered"
@@ -77,13 +111,13 @@ function SignUp() {
             </label>
           </div>
           <div className="form-control mt-6">
-            <button className="btn btn-primary text-xl font-bold">
+            <button className="btn btn-primary lg:text-xl lg:font-bold text-base font-medium">
               Sign Up
             </button>
           </div>
         </form>
         <div className="text-center">
-          <p>
+          <p className="text-sm">
             Already have an account?{" "}
             <Link to="/auth/signin" className="link link-hover text-accent">
               Sign in

@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Rating } from "react-simple-star-rating";
+import { AuthContext } from "../Context/AuthProvider";
 
 const AddMovie = () => {
+  const { user } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     moviePoster: "",
     movieTitle: "",
@@ -10,7 +12,10 @@ const AddMovie = () => {
     releaseYear: "",
     rating: 0,
     summary: "",
+    userEmail: user.email,
   });
+
+  console.log(user.email);
 
   const [errors, setErrors] = useState({});
   const genres = [

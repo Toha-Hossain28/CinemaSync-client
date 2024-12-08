@@ -19,6 +19,7 @@ export const AuthContext = createContext();
 const Auth = getAuth(app);
 function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [dbUser, setDbUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const createNewUser = (email, password) => {
@@ -43,7 +44,9 @@ function AuthProvider({ children }) {
 
   const authInfo = {
     user,
+    dbUser,
     setUser,
+    setDbUser,
     loading,
     createNewUser,
     userSignOut,

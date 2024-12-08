@@ -7,7 +7,8 @@ import { useContext } from "react";
 import { AuthContext } from "../Context/AuthProvider";
 function SignUp() {
   const navigate = useNavigate();
-  const { createNewUser, setUser, userGoogleSignIn } = useContext(AuthContext);
+  const { createNewUser, setUser, userGoogleSignIn, dbUser, setDbUser } =
+    useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -26,6 +27,26 @@ function SignUp() {
       })
       .catch((error) => {
         console.log(error.message);
+      });
+
+    // user with favorite movie array
+    const newData = {
+      ...data,
+      favoriteMovies: [],
+    };
+
+    // add user to database
+    fetch("http://localhost:3000/users", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(newData),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setDbUser(data);
       });
   };
 
@@ -52,7 +73,7 @@ function SignUp() {
           {/* name */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text">Email</span>
+              <span className="label-text">Name</span>
             </label>
             <input
               {...register("name")}
@@ -66,7 +87,7 @@ function SignUp() {
           {/* UserName */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text">Email</span>
+              <span className="label-text">Username</span>
             </label>
             <input
               {...register("username")}
@@ -80,7 +101,7 @@ function SignUp() {
           {/* photo URL */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text">Email</span>
+              <span className="label-text">PhotoURL</span>
             </label>
             <input
               {...register("photoURL")}

@@ -10,6 +10,8 @@ import AuthProvider from "./Context/AuthProvider";
 import SecondLayout from "./Layouts/SecondLayout";
 import AddMovie from "./Components/AddMovie";
 import PrivateRoute from "./Routes/PrivateRoute";
+import MovieDetail from "./Components/MovieDetail";
+import AllMovies from "./pages/AllMovies";
 
 const router = createBrowserRouter([
   {
@@ -42,12 +44,16 @@ const router = createBrowserRouter([
     errorElement: <div>404</div>,
     children: [
       {
-        path: "all",
-        element: <div>All Movies</div>,
+        path: "",
+        element: <AllMovies />,
       },
       {
-        path: "movie/:id",
-        element: <div>Movie Details</div>,
+        path: ":id",
+        element: (
+          <PrivateRoute>
+            <MovieDetail />
+          </PrivateRoute>
+        ),
       },
       {
         path: "addMovie",

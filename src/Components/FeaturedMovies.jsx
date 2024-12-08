@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import MovieDetail from "./MovieDetail";
+import { Rating } from "react-simple-star-rating";
+import { FaStar } from "react-icons/fa";
 
 // const movies = [
 //   {
@@ -78,6 +81,9 @@ function FeaturedMovies() {
       .then((data) => setMovies(data));
   }, []);
 
+  // sorting the movies based on rating and taking the first 6 Movie
+  const sortedMovies = movies.sort((a, b) => b.rating - a.rating).slice(0, 6);
+
   //   {
   // "_id": "67551f0cd2aed2c0ce85dafa",
   // "moviePoster": "https://upload.wikimedia.org/wikipedia/en/0/02/Iron_Man_%282008_film%29_poster.jpg",
@@ -96,7 +102,7 @@ function FeaturedMovies() {
         <p>Check out our featured movies below:</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {movies.map((movie) => (
+        {sortedMovies.map((movie) => (
           <div
             key={movie._id}
             className="card bg-base-100 shadow-xl border-2 border-white"
@@ -105,7 +111,7 @@ function FeaturedMovies() {
               <img
                 src={movie.moviePoster}
                 alt={movie.movieTitle}
-                className=""
+                className="max-w-[220pc] max-h-[326px]"
               />
             </figure>
             <div className="card-body">
@@ -113,7 +119,15 @@ function FeaturedMovies() {
               <p>Genre: {movie.genre}</p>
               <p>Duration: {movie.duration} minutes</p>
               <p>Release Year: {movie.releaseYear}</p>
-              <p>Rating: {movie.rating}</p>
+              {/* <p>Rating: {movie.rating * 20}</p> */}
+              {/* rating with star */}
+              {
+                <Rating
+                  readonly
+                  initialValue={movie.rating * 20}
+                  allowHalfIcon
+                />
+              }
               {/* <p>Summary: {movie.summary}</p> */}
               <div className="card-actions justify-end mt-4">
                 <Link to={`movies/${movie._id}`} className="btn btn-primary">

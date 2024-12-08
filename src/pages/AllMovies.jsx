@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
 import {} from "react";
 import { Link } from "react-router-dom";
+import { Rating } from "react-simple-star-rating";
 
 function AllMovies() {
   const [movies, setMovies] = useState([]);
@@ -40,6 +39,13 @@ function AllMovies() {
                 <p>Duration: {movie.duration} minutes</p>
                 <p>Release Year: {movie.releaseYear}</p>
                 <p>Rating: {movie.rating}</p>
+
+                <Rating
+                  readonly
+                  initialValue={movie.rating * 20}
+                  allowHalfIcon
+                />
+
                 {/* <p>Summary: {movie.summary}</p> */}
                 <div className="card-actions justify-end mt-4">
                   <Link to={`movies/${movie._id}`} className="btn btn-primary">

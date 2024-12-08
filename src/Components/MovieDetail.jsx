@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { AuthContext } from "../Context/AuthProvider";
+import { Rating } from "react-simple-star-rating";
 
 function MovieDetail() {
   // const movie = {
@@ -17,6 +19,7 @@ function MovieDetail() {
   // };
   const { id } = useParams();
   const [movie, setMovie] = useState({});
+  const { dbUser } = useContext(AuthContext);
   useEffect(() => {
     fetch(`http://localhost:3000/movies/${id}`)
       .then((response) => response.json())
@@ -63,7 +66,7 @@ function MovieDetail() {
           <strong>Release Year:</strong> {releaseYear}
         </p>
         <p>
-          <strong>Rating:</strong> {rating}
+          {<Rating readonly initialValue={movie.rating * 20} allowHalfIcon />}
         </p>
 
         <div className="card-actions">

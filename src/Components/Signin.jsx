@@ -6,7 +6,8 @@ import { useContext } from "react";
 import { AuthContext } from "../Context/AuthProvider";
 
 function SignIn() {
-  const { setUser, userSignIn, userGoogleSignIn } = useContext(AuthContext);
+  const { setUser, userSignIn, userGoogleSignIn, setDbUser, dbUser, user } =
+    useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
   const {
@@ -17,7 +18,7 @@ function SignIn() {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
+    // console.log(data);
     userSignIn(data.email, data.password)
       .then((result) => {
         console.log(result.user);
@@ -27,18 +28,69 @@ function SignIn() {
       .catch((error) => {
         console.log(error.message);
       });
+
+    // dbUser loading
+    fetch(`http://localhost:3000/users/${data.email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setDbUser(data);
+      });
+  };
+  // console.log("debuser", dbUser);
+  const addUserToDb = (oldData, user) => {
+    // user with favorite movie array
+    const newData = {
+      ...oldData,
+      favoriteMovies: [],
+    };
+
+    console.log(newData);
+
+    // add user to database
+    fetch("http://localhost:3000/users", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(newData),
+    })
+      .then((res) => res.json())
+      .then((data) => {});
   };
 
   const handleGoogleSignIn = () => {
     userGoogleSignIn()
       .then((result) => {
-        console.log(result.user);
+        // console.log(result.user);
         setUser(result.user);
+        const data = {
+          email: result.user.email,
+          name: result.user.displayName,
+          username: result.user.displayName,
+          photoURL: result.user.photoURL,
+        };
+        // console.log(data);
+        updateDbUser(data.email);
+        if (!dbUser) {
+          addUserToDb(data, user);
+        }
         navigate("/");
       })
       .catch((error) => {
         console.log(error.message);
       });
+  };
+
+  const email = user?.email;
+  const updateDbUser = (email) => {
+    if (email) {
+      fetch(`http://localhost:3000/users/${email}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          setDbUser(data);
+        });
+    }
   };
 
   return (

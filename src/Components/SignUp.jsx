@@ -3,11 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import { useForm } from "react-hook-form";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../Context/AuthProvider";
 function SignUp() {
   const navigate = useNavigate();
-  const { createNewUser, setUser, userGoogleSignIn, dbUser, setDbUser } =
+  const { createNewUser, setUser, userGoogleSignIn, dbUser, setDbUser, user } =
     useContext(AuthContext);
   const {
     register,
@@ -16,6 +16,8 @@ function SignUp() {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  // console.log(user?.email);
+
   const onSubmit = (data) => {
     // e.preventDefault();
     // console.log(data);
@@ -23,17 +25,22 @@ function SignUp() {
       .then((result) => {
         console.log(result.user);
         setUser(result.user);
+        addUserToDb(data, user);
         navigate("/");
       })
       .catch((error) => {
         console.log(error.message);
       });
+  };
 
+  const addUserToDb = (oldData, user) => {
     // user with favorite movie array
     const newData = {
-      ...data,
+      ...oldData,
       favoriteMovies: [],
     };
+
+    console.log(newData);
 
     // add user to database
     fetch("http://localhost:3000/users", {
@@ -44,24 +51,50 @@ function SignUp() {
       body: JSON.stringify(newData),
     })
       .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setDbUser(data);
-      });
+      .then((data) => {});
   };
 
   const handleGoogleSignIn = () => {
     userGoogleSignIn()
       .then((result) => {
-        console.log(result.user);
+        // console.log(result.user);
         setUser(result.user);
+        const data = {
+          email: result.user.email,
+          name: result.user.displayName,
+          username: result.user.displayName,
+          photoURL: result.user.photoURL,
+        };
+        // console.log(data);
+        updateDbUser(data.email);
+        if (!dbUser) {
+          addUserToDb(data, user);
+        }
         navigate("/");
       })
       .catch((error) => {
         console.log(error.message);
       });
   };
+  const email = user?.email;
+  const updateDbUser = (email) => {
+    if (email) {
+      fetch(`http://localhost:3000/users/${email}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          setDbUser(data);
+        });
+    }
+  };
 
+  useEffect(() => {
+    updateDbUser(email);
+  }, [email, updateDbUser]);
+  // updateDbUser(email);
+
+  // console.log(dbUser, user);
+  // console.log(email);
   return (
     <div className="w-full grid place-items-center py-10">
       <div className="card bg-base-100 lg:w-3/5 w-full shrink-0 shadow-2xl">

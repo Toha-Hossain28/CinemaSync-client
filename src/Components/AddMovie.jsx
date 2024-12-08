@@ -13,35 +13,54 @@ const AddMovie = () => {
   });
 
   const [errors, setErrors] = useState({});
-  const genres = ["Comedy", "Drama", "Horror", "Action", "Sci-Fi", "Fantasy"];
-  const years = [2024, 2023, 2022, 2021, 2020, 2019];
+  const genres = [
+    "Comedy",
+    "Drama",
+    "Horror",
+    "Action",
+    "Sci-Fi",
+    "Thriller",
+    "Romance",
+    "Documentary",
+    "Animation",
+    "Crime",
+    "Fantasy",
+    "Adventure",
+    "Family",
+    "Mystery",
+    "Music",
+    "History",
+    "War",
+    "Western",
+    "Biography",
+    "Musical",
+    "Sport",
+    "Talk-Show",
+  ];
+  const years = [
+    2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013,
+    2012, 2011, 2010, 2009, 2008, 2007, 2006, 2005, 2004,
+  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const [ratingValue, setRatingValue] = useState(0);
-
   const handleRating = (rate) => {
-    setRatingValue(rate);
-  };
-  const handleReset = () => {
-    // Set the initial value
-    setRatingValue(0);
+    setFormData({ ...formData, rating: rate / 20 });
   };
 
   const validateForm = () => {
     const newErrors = {};
-
     if (
       !formData.moviePoster ||
       !/^https?:\/\/.+\..+/.test(formData.moviePoster)
     ) {
-      newErrors.moviePoster = "Movie Poster must be a valid URL.";
+      newErrors.moviePoster = "Please enter a valid URL.";
     }
     if (!formData.movieTitle || formData.movieTitle.length < 2) {
-      newErrors.movieTitle = "Movie Title must have at least 2 characters.";
+      newErrors.movieTitle = "Title must have at least 2 characters.";
     }
     if (!formData.genre) {
       newErrors.genre = "Please select a genre.";
@@ -66,7 +85,19 @@ const AddMovie = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Movie added successfully:", formData);
+      console.log("Movie Added:", formData);
+
+      // send to database
+      fetch("http://localhost:3000/movies", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data));
+
       alert("Movie added successfully!");
       setFormData({
         moviePoster: "",
@@ -82,9 +113,9 @@ const AddMovie = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Add Movie</h1>
-      <form onSubmit={handleSubmit} className="">
+    <div className="max-w-md mx-auto p-4">
+      <h1 className="text-xl font-bold mb-4">Add Movie</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
         {/* Movie Poster */}
         <div>
           <label className="block mb-1 font-medium">Movie Poster (URL)</label>
@@ -173,11 +204,18 @@ const AddMovie = () => {
         </div>
 
         {/* Rating */}
-
         <div>
           <label className="block mb-1 font-medium">Rating</label>
-          <Rating onClick={handleRating} initialValue={ratingValue} />
-          <button onClick={handleReset}>reset</button>
+          <Rating
+            onClick={handleRating}
+            ratingValue={formData.rating * 20} // Convert back to 100 scale for display
+            fillColor="orange"
+            emptyColor="gray"
+            className="inline-flex"
+          />
+          {errors.rating && (
+            <p className="text-red-500 text-sm">{errors.rating}</p>
+          )}
         </div>
 
         {/* Summary */}

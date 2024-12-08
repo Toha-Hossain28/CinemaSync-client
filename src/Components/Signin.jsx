@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import { useForm } from "react-hook-form";
@@ -7,6 +7,7 @@ import { AuthContext } from "../Context/AuthProvider";
 
 function SignIn() {
   const { setUser, userSignIn, userGoogleSignIn } = useContext(AuthContext);
+  const location = useLocation();
   const navigate = useNavigate();
   const {
     register,
@@ -21,7 +22,7 @@ function SignIn() {
       .then((result) => {
         console.log(result.user);
         setUser(result.user);
-        navigate("/");
+        navigate(location.state ? location.state : "/");
       })
       .catch((error) => {
         console.log(error.message);

@@ -40,7 +40,7 @@ function Navbar() {
                 <NavLink to="/">Home</NavLink>
               </li>
               <li>
-                <NavLink to="/movies">All Movie</NavLink>
+                <NavLink to="/movies/all">All Movie</NavLink>
               </li>
               <li>
                 <NavLink to="/movies/addmovie">Add Movie</NavLink>
@@ -63,7 +63,7 @@ function Navbar() {
               <NavLink to="/">Home</NavLink>
             </li>
             <li>
-              <NavLink to="/movies">All Movie</NavLink>
+              <NavLink to="/movies/all">All Movie</NavLink>
             </li>
             <li>
               <NavLink to="/movies/addmovie">Add Movie</NavLink>

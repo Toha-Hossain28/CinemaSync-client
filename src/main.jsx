@@ -42,6 +42,14 @@ const router = createBrowserRouter([
     errorElement: <div>404</div>,
     children: [
       {
+        path: "all",
+        element: <div>All Movies</div>,
+      },
+      {
+        path: "movie/:id",
+        element: <div>Movie Details</div>,
+      },
+      {
         path: "addMovie",
         element: (
           <PrivateRoute>

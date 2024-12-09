@@ -21,7 +21,7 @@ function SignIn() {
     // console.log(data);
     userSignIn(data.email, data.password)
       .then((result) => {
-        console.log(result.user);
+        // console.log(result.user);
         setUser(result.user);
         navigate(location.state ? location.state : "/");
       })
@@ -44,7 +44,7 @@ function SignIn() {
       favoriteMovies: [],
     };
 
-    console.log(newData);
+    // console.log(newData);
 
     // add user to database
     fetch("http://localhost:3000/users", {
@@ -87,7 +87,7 @@ function SignIn() {
       fetch(`http://localhost:3000/users/${email}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
+          // console.log(data);
           setDbUser(data);
         });
     }

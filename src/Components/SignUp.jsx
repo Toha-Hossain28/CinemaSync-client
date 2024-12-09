@@ -60,7 +60,7 @@ function SignUp() {
     console.log(newData);
 
     // add user to database
-    fetch("http://localhost:3000/users", {
+    fetch("https://movie-server-zeta.vercel.app/users", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -96,7 +96,7 @@ function SignUp() {
   const email = user?.email;
   const updateDbUser = (email) => {
     if (email) {
-      fetch(`http://localhost:3000/users/${email}`)
+      fetch(`https://movie-server-zeta.vercel.app/users/${email}`)
         .then((res) => res.json())
         .then((data) => {
           console.log(data);

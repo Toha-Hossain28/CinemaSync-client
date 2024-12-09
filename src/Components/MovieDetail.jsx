@@ -23,7 +23,7 @@ function MovieDetail() {
   const { dbUser, user } = useContext(AuthContext);
   const navigate = useNavigate();
   useEffect(() => {
-    fetch(`http://localhost:3000/movies/${id}`)
+    fetch(`https://movie-server-zeta.vercel.app/movies/${id}`)
       .then((response) => response.json())
       .then((data) => setMovie(data));
     // console.log(movie);
@@ -40,7 +40,7 @@ function MovieDetail() {
   } = movie;
 
   const handleFavorite = () => {
-    fetch(`http://localhost:3000/users/${user.email}`)
+    fetch(`https://movie-server-zeta.vercel.app/users/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         // Check if the user data and favoriteMovies exist
@@ -53,7 +53,7 @@ function MovieDetail() {
           const updatedUser = { ...data, favoriteMovies: updatedFavorites };
 
           // Send the updated user data to the backend
-          fetch(`http://localhost:3000/users/${user.email}`, {
+          fetch(`https://movie-server-zeta.vercel.app/users/${user.email}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -75,7 +75,7 @@ function MovieDetail() {
   };
 
   const handleDelete = () => {
-    fetch(`http://localhost:3000/movies/${id}`, {
+    fetch(`https://movie-server-zeta.vercel.app/movies/${id}`, {
       method: "DELETE",
     })
       .then((response) => response.json())

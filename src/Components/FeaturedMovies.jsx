@@ -76,7 +76,7 @@ function FeaturedMovies() {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/movies")
+    fetch("https://movie-server-zeta.vercel.app/movies")
       .then((response) => response.json())
       .then((data) => setMovies(data));
   }, []);

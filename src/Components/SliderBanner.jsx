@@ -84,7 +84,7 @@ function SliderBanner() {
   const [newMovies, setNewMovies] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/movies")
+    fetch("https://movie-server-zeta.vercel.app/movies")
       .then((res) => res.json())
       .then((data) => {
         setNewMovies(data);

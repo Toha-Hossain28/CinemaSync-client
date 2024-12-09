@@ -9,7 +9,7 @@ function FavoriteMovies() {
   const [movieList, setMovieList] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/users/${user.email}`)
+    fetch(`https://movie-server-zeta.vercel.app/users/${user.email}`)
       .then((res) => res.json())
       .then((data) => setFavMovies([...new Set(data.favoriteMovies)])) // Ensure no duplicates
       .catch((error) =>
@@ -22,7 +22,9 @@ function FavoriteMovies() {
       const updatedMovieList = [];
       for (let id of favMovies) {
         try {
-          const response = await fetch(`http://localhost:3000/movies/${id}`);
+          const response = await fetch(
+            `https://movie-server-zeta.vercel.app/movies/${id}`
+          );
           const data = await response.json();
           updatedMovieList.push(data);
         } catch (error) {
@@ -38,14 +40,14 @@ function FavoriteMovies() {
   }, [favMovies]);
 
   const handleDelete = (movieId) => {
-    fetch(`http://localhost:3000/users/${user.email}`)
+    fetch(`https://movie-server-zeta.vercel.app/users/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         const updatedFavorites = data.favoriteMovies.filter(
           (id) => id !== movieId
         );
         const updatedUser = { ...data, favoriteMovies: updatedFavorites };
-        fetch(`http://localhost:3000/users/${user.email}`, {
+        fetch(`https://movie-server-zeta.vercel.app/users/${user.email}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",

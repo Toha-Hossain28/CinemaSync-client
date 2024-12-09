@@ -94,7 +94,7 @@ const AddMovie = () => {
       console.log("Movie Added:", formData);
 
       // send to database
-      fetch("http://localhost:3000/movies", {
+      fetch("https://movie-server-zeta.vercel.app/movies", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

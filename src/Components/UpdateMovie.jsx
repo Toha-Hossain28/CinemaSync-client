@@ -51,7 +51,7 @@ const UpdateMovie = () => {
 
   // Fetch movie details by ID
   useEffect(() => {
-    fetch(`http://localhost:3000/movies/${id}`)
+    fetch(`https://movie-server-zeta.vercel.app/movies/${id}`)
       .then((response) => response.json())
       .then((data) => setFormData(data))
       .catch((error) => console.error("Error fetching movie data:", error));
@@ -103,7 +103,7 @@ const UpdateMovie = () => {
       console.log("Updated Movie:", formData);
 
       // Update movie details in the database
-      fetch(`http://localhost:3000/movies/${id}`, {
+      fetch(`https://movie-server-zeta.vercel.app/movies/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

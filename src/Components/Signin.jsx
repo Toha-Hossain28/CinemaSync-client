@@ -30,7 +30,7 @@ function SignIn() {
       });
 
     // dbUser loading
-    fetch(`http://localhost:3000/users/${data.email}`)
+    fetch(`https://movie-server-zeta.vercel.app/users/${data.email}`)
       .then((res) => res.json())
       .then((data) => {
         setDbUser(data);
@@ -47,7 +47,7 @@ function SignIn() {
     // console.log(newData);
 
     // add user to database
-    fetch("http://localhost:3000/users", {
+    fetch("https://movie-server-zeta.vercel.app/users", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -84,7 +84,7 @@ function SignIn() {
   const email = user?.email;
   const updateDbUser = (email) => {
     if (email) {
-      fetch(`http://localhost:3000/users/${email}`)
+      fetch(`https://movie-server-zeta.vercel.app/users/${email}`)
         .then((res) => res.json())
         .then((data) => {
           // console.log(data);

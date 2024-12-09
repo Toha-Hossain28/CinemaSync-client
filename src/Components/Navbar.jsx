@@ -179,32 +179,28 @@ function Navbar() {
           >
             Sign Up
           </Link>
-          <div
-            className={`tooltip tooltip-left z-20 ${user ? "" : "hidden"}`}
-            data-tip={user?.displayName}
-          >
-            <div className="flex justify-center items-center gap-5">
-              <div className="dropdown dropdown-end">
-                <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                  <div className="w-10 rounded-full">
-                    <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXXQkegDDyw8ZeNVE7pR2YfHqc8ZRLXSK8wA&s"
-                      alt=""
-                    />
-                  </div>
-                </label>
-                <ul
-                  tabIndex={0}
-                  className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-36"
-                >
-                  <li>
-                    <button onClick={handleSignOut} className="btn btn-error">
-                      Sign Out
-                    </button>
-                  </li>
-                </ul>
+
+          <div className={`${user ? "" : "hidden"} flex items-center gap-5`}>
+            <div
+              className={`tooltip tooltip-left z-20 `}
+              data-tip={user?.displayName}
+            >
+              <div className="flex justify-center items-center gap-5">
+                <div className="dropdown dropdown-end">
+                  <label
+                    tabIndex={0}
+                    className="btn btn-ghost btn-circle avatar"
+                  >
+                    <div className="w-10 rounded-full">
+                      <img src={user?.photoURL} alt="" />
+                    </div>
+                  </label>
+                </div>
               </div>
             </div>
+            <button onClick={handleSignOut} className="btn btn-error">
+              Sign Out
+            </button>
           </div>
         </div>
       </div>

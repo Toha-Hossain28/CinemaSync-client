@@ -7,7 +7,11 @@ function PrivateRoute({ children }) {
   const { user, loading } = useContext(AuthContext);
   const location = useLocation();
   if (loading) {
-    return <span className="loading loading-spinner loading-lg mx-auto"></span>;
+    return (
+      <div className="min-h-[calc(100vh-136px)] flex justify-center items-center">
+        <span className="loading loading-spinner loading-lg "></span>
+      </div>
+    );
   }
   if (user && user.email) {
     return children;

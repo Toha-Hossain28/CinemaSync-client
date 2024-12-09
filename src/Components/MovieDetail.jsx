@@ -44,7 +44,7 @@ function MovieDetail() {
       .then((res) => res.json())
       .then((data) => {
         // Check if the user data and favoriteMovies exist
-        console.log(data);
+        // console.log(data);
         if (data && data.favoriteMovies) {
           // Create a new favoriteMovies array
           const updatedFavorites = [...data.favoriteMovies, id];

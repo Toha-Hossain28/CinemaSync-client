@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
@@ -6,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "../Context/AuthProvider";
 import { updateProfile } from "firebase/auth";
+
 function SignUp() {
   const navigate = useNavigate();
   const {
@@ -17,6 +17,7 @@ function SignUp() {
     user,
     Auth,
   } = useContext(AuthContext);
+
   const {
     register,
     handleSubmit,
@@ -24,14 +25,9 @@ function SignUp() {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  // console.log(user?.email);
-
   const onSubmit = (data) => {
-    // e.preventDefault();
-    // console.log(data);
     createNewUser(data.email, data.password)
       .then((result) => {
-        console.log(result.user);
         setUser(result.user);
         addUserToDb(data, user);
         updateProfile(Auth.currentUser, {
@@ -40,7 +36,6 @@ function SignUp() {
         })
           .then(() => {})
           .catch((error) => {
-            // toast.error("Profile update failed!");
             console.error("Error updating profile:", error);
           });
         navigate("/");
@@ -51,30 +46,23 @@ function SignUp() {
   };
 
   const addUserToDb = (oldData, user) => {
-    // user with favorite movie array
     const newData = {
       ...oldData,
       favoriteMovies: [],
     };
 
-    console.log(newData);
-
-    // add user to database
     fetch("https://movie-server-zeta.vercel.app/users", {
       method: "POST",
       headers: {
         "content-type": "application/json",
       },
       body: JSON.stringify(newData),
-    })
-      .then((res) => res.json())
-      .then((data) => {});
+    }).then((res) => res.json());
   };
 
   const handleGoogleSignIn = () => {
     userGoogleSignIn()
       .then((result) => {
-        // console.log(result.user);
         setUser(result.user);
         const data = {
           email: result.user.email,
@@ -82,7 +70,6 @@ function SignUp() {
           username: result.user.displayName,
           photoURL: result.user.photoURL,
         };
-        // console.log(data);
         updateDbUser(data.email);
         if (!dbUser) {
           addUserToDb(data, user);
@@ -93,13 +80,14 @@ function SignUp() {
         console.log(error.message);
       });
   };
+
   const email = user?.email;
+
   const updateDbUser = (email) => {
     if (email) {
       fetch(`https://movie-server-zeta.vercel.app/users/${email}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setDbUser(data);
         });
     }
@@ -107,11 +95,8 @@ function SignUp() {
 
   useEffect(() => {
     updateDbUser(email);
-  }, [email, updateDbUser]);
-  // updateDbUser(email);
+  }, [email]);
 
-  // console.log(dbUser, user);
-  // console.log(email);
   return (
     <div className="w-full grid place-items-center py-10">
       <div className="card bg-base-100 lg:w-3/5 w-full shrink-0 shadow-2xl">
@@ -120,7 +105,7 @@ function SignUp() {
           <p className="lg:text-2xl text-base">Sign up</p>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="card-body">
-          {/* name */}
+          {/* Name */}
           <div className="form-control">
             <label className="label">
               <span className="label-text">Name</span>
@@ -134,7 +119,7 @@ function SignUp() {
               required
             />
           </div>
-          {/* UserName */}
+          {/* Username */}
           <div className="form-control">
             <label className="label">
               <span className="label-text">Username</span>
@@ -148,10 +133,10 @@ function SignUp() {
               required
             />
           </div>
-          {/* photo URL */}
+          {/* Photo URL */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text">PhotoURL</span>
+              <span className="label-text">Photo URL</span>
             </label>
             <input
               {...register("photoURL")}
@@ -162,7 +147,7 @@ function SignUp() {
               required
             />
           </div>
-          {/* email */}
+          {/* Email */}
           <div className="form-control">
             <label className="label">
               <span className="label-text">Email</span>
@@ -171,29 +156,39 @@ function SignUp() {
               {...register("email")}
               name="email"
               type="email"
-              placeholder="email"
+              placeholder="Email"
               className="input input-bordered"
               required
             />
           </div>
-          {/* password */}
+          {/* Password */}
           <div className="form-control">
             <label className="label">
               <span className="label-text">Password</span>
             </label>
             <input
-              {...register("password")}
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters long",
+                },
+                pattern: {
+                  value: /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/,
+                  message:
+                    "Password must contain at least one uppercase letter, one lowercase letter, and be at least 6 characters long",
+                },
+              })}
               name="password"
               type="password"
-              placeholder="password"
+              placeholder="Password"
               className="input input-bordered"
-              required
             />
-            <label className="label">
-              <a href="#" className="label-text-alt link link-hover">
-                Forgot password?
-              </a>
-            </label>
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </div>
           <div className="form-control mt-6">
             <button

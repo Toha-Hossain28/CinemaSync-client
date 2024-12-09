@@ -2,10 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../Context/AuthProvider";
 import { Rating } from "react-simple-star-rating";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 function FavoriteMovies() {
   const { user } = useContext(AuthContext);
-  const [favMovies, setFavMovies] = useState([]);
+  let [favMovies, setFavMovies] = useState([]);
   const [movieList, setMovieList] = useState([]);
 
   useEffect(() => {
@@ -58,7 +59,7 @@ function FavoriteMovies() {
           .then(() => {
             // alert("Movie removed from favorites!");
             Swal.fire("Success", "Movie removed from favorites!", "success");
-            window.location.reload();
+            setFavMovies(updatedFavorites);
           })
           .catch((error) => console.error("Error deleting movie:", error));
       })

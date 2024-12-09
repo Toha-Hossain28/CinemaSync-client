@@ -4,6 +4,7 @@ import { FaFacebookF } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { useContext } from "react";
 import { AuthContext } from "../Context/AuthProvider";
+import Swal from "sweetalert2";
 
 function SignIn() {
   const { setUser, userSignIn, userGoogleSignIn, setDbUser, dbUser, user } =
@@ -27,6 +28,7 @@ function SignIn() {
       })
       .catch((error) => {
         console.log(error.message);
+        Swal.fire("Error", error.message, "error");
       });
 
     // dbUser loading
@@ -78,6 +80,7 @@ function SignIn() {
       })
       .catch((error) => {
         console.log(error.message);
+        Swal.fire("Error", error.message, "error");
       });
   };
 

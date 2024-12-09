@@ -70,18 +70,22 @@ function Banner() {
     },
   ];
   return (
-    <div className="lg:grid lg:grid-cols-12 flex flex-col  w-full px-16 pt-10 pb-10">
-      <div className="col-span-7 flex flex-col justify-center space-y-5">
-        <h1 className="text-5xl font-bold">CinemaSync</h1>
-        <p className="text-sm xl:w-4/5">
-          Elevate your movie journey by connecting with like-minded film lovers,
-          discovering hidden gems, tracking your favorites, and sharing
-          cinematic stories that inspire.
-        </p>
+    <div>
+      <div className="divider"></div>
+      <div className="lg:grid lg:grid-cols-12 flex flex-col  w-full px-16 pt-10 pb-10">
+        <div className="col-span-7 flex flex-col justify-center space-y-5">
+          <h1 className="text-5xl font-bold">CinemaSync</h1>
+          <p className="text-sm xl:w-4/5">
+            Elevate your movie journey by connecting with like-minded film
+            lovers, discovering hidden gems, tracking your favorites, and
+            sharing cinematic stories that inspire.
+          </p>
+        </div>
+        <div className="col-span-5 flex justify-center items-center mt-10">
+          <SliderBanner />
+        </div>
       </div>
-      <div className="col-span-5 flex justify-center items-center mt-10">
-        <SliderBanner />
-      </div>
+      <div className="divider"></div>
     </div>
   );
 }

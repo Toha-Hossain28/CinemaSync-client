@@ -30,7 +30,7 @@ function AllMovies() {
                 <img
                   src={movie.moviePoster}
                   alt={movie.movieTitle}
-                  className=""
+                  className="rounded-lg mt-5"
                 />
               </figure>
               <div className="card-body">

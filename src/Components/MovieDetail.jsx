@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
 import { Rating } from "react-simple-star-rating";
+import Swal from "sweetalert2";
 
 function MovieDetail() {
   // const movie = {
@@ -38,7 +39,6 @@ function MovieDetail() {
     summary,
   } = movie;
 
-  const [fetchedUser, setFetchedUser] = useState({});
   const handleFavorite = () => {
     fetch(`http://localhost:3000/users/${user.email}`)
       .then((res) => res.json())
@@ -62,8 +62,9 @@ function MovieDetail() {
           })
             .then((res) => res.json())
             .then(() => {
-              alert("Movie added to favorites!");
-              navigate("/movies");
+              // alert("Movie added to favorites!");
+              Swal.fire("Success", "Movie added to favorites!", "success");
+              // navigate("/movies");
             })
             .catch((error) => console.error("Error adding movie:", error));
         } else {
@@ -80,43 +81,52 @@ function MovieDetail() {
       .then((response) => response.json())
       .then(() => {
         // alert("Movie deleted successfully!");
+        Swal.fire("Success", "Movie deleted successfully!", "success");
         navigate("/movies");
       })
       .catch((error) => console.error("Error deleting movie:", error));
   };
 
   return (
-    <div className="card card-side bg-base-100 shadow-xl max-w-5xl mx-auto my-48">
-      <figure className="w-1/2 rounded-box">
-        <img src={moviePoster} alt="Movie" />
-      </figure>
-      <div className="card-body">
-        <h2 className="card-title">{movieTitle}</h2>
-        <p>{summary}</p>
-        <p>
-          <strong>Genre:</strong> {genre}
-        </p>
-        <p>
-          <strong>Duration:</strong> {duration} minutes
-        </p>
-        <p>
-          <strong>Release Year:</strong> {releaseYear}
-        </p>
-        <p>
-          {<Rating readonly initialValue={movie.rating * 20} allowHalfIcon />}
-        </p>
+    <div className="min-h-[calc(100vh-136px)] grid place-content-center mt-10 mb-10">
+      <h1 className="text-3xl font-bold underline text-center pb-10">
+        Movie Details
+      </h1>
+      <div className="card card-side bg-base-100 shadow-xl mx-auto max-w-4xl flex flex-col md:min-w-[725px]">
+        <figure className="rounded-box">
+          <img
+            src={moviePoster}
+            alt="Movie"
+            className="h-[400px] w-[300px] rounded-box"
+          />
+        </figure>
+        <div className="card-body">
+          <h2 className="card-title">{movieTitle}</h2>
+          <p>{summary}</p>
+          <p>
+            <strong>Genre:</strong> {genre}
+          </p>
+          <p>
+            <strong>Duration:</strong> {duration} minutes
+          </p>
+          <p>
+            <strong>Release Year:</strong> {releaseYear}
+          </p>
+          <p>
+            {<Rating readonly initialValue={movie.rating * 20} allowHalfIcon />}
+          </p>
 
-        <div className="card-actions">
-          <button className="btn btn-primary" onClick={handleDelete}>
-            Delete
-          </button>
-          <button className="btn btn-primary" onClick={handleFavorite}>
-            Favorite
-          </button>
-          <Link to={`/movies/update/${id}`} className="btn btn-primary">
-            Update
-          </Link>
-          {/* <button
+          <div className="card-actions">
+            <button className="btn btn-primary" onClick={handleDelete}>
+              Delete
+            </button>
+            <button className="btn btn-primary" onClick={handleFavorite}>
+              Favorite
+            </button>
+            <Link to={`/movies/update/${id}`} className="btn btn-primary">
+              Update
+            </Link>
+            {/* <button
             onClick={() =>
               Swal.fire({
                 title: "Error!",
@@ -128,6 +138,7 @@ function MovieDetail() {
           >
             AlertCheck
           </button> */}
+          </div>
         </div>
       </div>
     </div>

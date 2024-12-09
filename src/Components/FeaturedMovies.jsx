@@ -111,7 +111,7 @@ function FeaturedMovies() {
               <img
                 src={movie.moviePoster}
                 alt={movie.movieTitle}
-                className="max-w-[220pc] max-h-[326px]"
+                className="max-w-[220px] max-h-[326px] rounded-lg mt-5"
               />
             </figure>
             <div className="card-body">
@@ -137,6 +137,11 @@ function FeaturedMovies() {
             </div>
           </div>
         ))}
+      </div>
+      <div className="grid place-content-center mt-10">
+        <Link to="/movies" className="btn btn-primary">
+          see more
+        </Link>
       </div>
     </div>
   );

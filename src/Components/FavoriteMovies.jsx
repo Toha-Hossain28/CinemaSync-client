@@ -57,7 +57,10 @@ function FavoriteMovies() {
   // };
 
   return (
-    <div>
+    <div className="min-h-[calc(100vh-136px)] pt-10">
+      <h1 className="text-3xl font-bold underline text-center pb-10">
+        Favorite Movies
+      </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-3/4 mx-auto">
         {movieList.map((movie) => (
           <div
@@ -68,7 +71,7 @@ function FavoriteMovies() {
               <img
                 src={movie.moviePoster}
                 alt={movie.movieTitle}
-                className=""
+                className="rounded-lg mt-5"
               />
             </figure>
             <div className="card-body">

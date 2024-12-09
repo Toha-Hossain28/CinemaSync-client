@@ -125,8 +125,8 @@ const AddMovie = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-4">
-      <h1 className="text-xl font-bold mb-4">Add Movie</h1>
+    <div className="max-w-md mx-auto p-4 min-h-[calc(100vh-136px)] pt-10">
+      <h1 className="text-3xl font-bold mb-4">Add Movie</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Movie Poster */}
         <div>

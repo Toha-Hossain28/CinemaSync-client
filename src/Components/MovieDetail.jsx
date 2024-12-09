@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
 import { Rating } from "react-simple-star-rating";
 
@@ -74,6 +74,21 @@ function MovieDetail() {
           <button className="btn btn-primary" onClick={handleFavorite}>
             Favorite
           </button>
+          <Link to={`/movies/update/${id}`} className="btn btn-primary">
+            Update
+          </Link>
+          {/* <button
+            onClick={() =>
+              Swal.fire({
+                title: "Error!",
+                text: "Do you want to continue",
+                icon: "error",
+                confirmButtonText: "Cool",
+              })
+            }
+          >
+            AlertCheck
+          </button> */}
         </div>
       </div>
     </div>

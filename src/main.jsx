@@ -12,6 +12,8 @@ import AddMovie from "./Components/AddMovie";
 import PrivateRoute from "./Routes/PrivateRoute";
 import MovieDetail from "./Components/MovieDetail";
 import AllMovies from "./pages/AllMovies";
+import Error from "./pages/Error";
+import UpdateMovie from "./Components/UpdateMovie";
 
 const router = createBrowserRouter([
   {
@@ -63,6 +65,14 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+      {
+        path: "update/:id",
+        element: (
+          <PrivateRoute>
+            <UpdateMovie />
+          </PrivateRoute>
+        ),
+      },
     ],
   },
   {
@@ -79,6 +89,10 @@ const router = createBrowserRouter([
         element: <SignUp />,
       },
     ],
+  },
+  {
+    path: "*",
+    element: <Error />,
   },
 ]);
 

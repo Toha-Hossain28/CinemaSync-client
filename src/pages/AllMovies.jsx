@@ -48,7 +48,7 @@ function AllMovies() {
 
                 {/* <p>Summary: {movie.summary}</p> */}
                 <div className="card-actions justify-end mt-4">
-                  <Link to={`movies/${movie._id}`} className="btn btn-primary">
+                  <Link to={`/movies/${movie._id}`} className="btn btn-primary">
                     See Details
                   </Link>
                 </div>

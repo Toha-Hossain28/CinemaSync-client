@@ -1,10 +1,13 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Rating } from "react-simple-star-rating";
 import { AuthContext } from "../Context/AuthProvider";
+import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-const AddMovie = () => {
+const UpdateMovie = () => {
   const { user } = useContext(AuthContext);
+  const { id } = useParams(); // Assuming you're passing the movie ID in the URL
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     moviePoster: "",
     movieTitle: "",
@@ -15,8 +18,6 @@ const AddMovie = () => {
     summary: "",
     userEmail: user.email,
   });
-
-  console.log(user.email);
 
   const [errors, setErrors] = useState({});
   const genres = [
@@ -47,6 +48,14 @@ const AddMovie = () => {
     2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013,
     2012, 2011, 2010, 2009, 2008, 2007, 2006, 2005, 2004,
   ];
+
+  // Fetch movie details by ID
+  useEffect(() => {
+    fetch(`http://localhost:3000/movies/${id}`)
+      .then((response) => response.json())
+      .then((data) => setFormData(data))
+      .catch((error) => console.error("Error fetching movie data:", error));
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -91,42 +100,34 @@ const AddMovie = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Movie Added:", formData);
+      console.log("Updated Movie:", formData);
 
-      // send to database
-      fetch("http://localhost:3000/movies", {
-        method: "POST",
+      // Update movie details in the database
+      fetch(`http://localhost:3000/movies/${id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       })
         .then((response) => response.json())
-        .then((data) => console.log(data));
-
-      // alert("Movie added successfully!");
-      Swal.fire({
-        title: "Success",
-        text: "Movie Added Successfully!",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
-      setFormData({
-        moviePoster: "",
-        movieTitle: "",
-        genre: "",
-        duration: "",
-        releaseYear: "",
-        rating: 0,
-        summary: "",
-      });
-      setErrors({});
+        .then(() => {
+          // alert("Movie updated successfully!");
+          navigate("/movies"); // Navigate to the movie list page
+        })
+        .catch((error) => console.error("Error updating movie:", error));
     }
+    Swal.fire({
+      title: "Update Movie Details",
+      text: "Do you want to continue",
+      icon: "success",
+      confirmButtonText: "Confirm",
+    });
   };
 
   return (
     <div className="max-w-md mx-auto p-4">
-      <h1 className="text-xl font-bold mb-4">Add Movie</h1>
+      <h1 className="text-xl font-bold mb-4">Update Movie</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Movie Poster */}
         <div>
@@ -249,11 +250,11 @@ const AddMovie = () => {
           type="submit"
           className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
         >
-          Add Movie
+          Update Movie
         </button>
       </form>
     </div>
   );
 };
 
-export default AddMovie;
+export default UpdateMovie;

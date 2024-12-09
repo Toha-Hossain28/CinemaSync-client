@@ -1,3 +1,5 @@
+import SliderBanner from "./SliderBanner";
+
 function Banner() {
   const movies = [
     {
@@ -68,7 +70,7 @@ function Banner() {
     },
   ];
   return (
-    <div className="md:grid md:grid-cols-12 flex flex-col  w-full px-14 pt-10 bg-black pb-10">
+    <div className="lg:grid lg:grid-cols-12 flex flex-col  w-full px-16 pt-10 pb-10">
       <div className="col-span-7 flex flex-col justify-center space-y-5">
         <h1 className="text-5xl font-bold">CinemaSync</h1>
         <p className="text-sm xl:w-4/5">
@@ -78,21 +80,7 @@ function Banner() {
         </p>
       </div>
       <div className="col-span-5 flex justify-center items-center mt-10">
-        <div className="carousel carousel-center rounded-box  space-x-4">
-          {movies.map((movie, index) => {
-            return (
-              <div
-                className="carousel-item border-2 border-white rounded-box"
-                key={index}
-              >
-                <img
-                  src={movie.MoviePoster}
-                  className="rounded-box w-[300px] h-[400px]"
-                />
-              </div>
-            );
-          })}
-        </div>
+        <SliderBanner />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../Context/AuthProvider";
 import { Rating } from "react-simple-star-rating";
+import Swal from "sweetalert2";
 
 function FavoriteMovies() {
   const { user } = useContext(AuthContext);
@@ -36,25 +37,31 @@ function FavoriteMovies() {
     }
   }, [favMovies]);
 
-  // const handleDelete = (movieId) => {
-  //   fetch(`http://localhost:3000/users/${user.email}`, {
-  //     method: "PUT",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       favoriteMovies: favMovies.filter((id) => id !== movieId),
-  //     }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       console.log(data);
-  //       setFavMovies(data.favoriteMovies);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error deleting favorite movie:", error);
-  //     });
-  // };
+  const handleDelete = (movieId) => {
+    fetch(`http://localhost:3000/users/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        const updatedFavorites = data.favoriteMovies.filter(
+          (id) => id !== movieId
+        );
+        const updatedUser = { ...data, favoriteMovies: updatedFavorites };
+        fetch(`http://localhost:3000/users/${user.email}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedUser),
+        })
+          .then((res) => res.json())
+          .then(() => {
+            // alert("Movie removed from favorites!");
+            Swal.fire("Success", "Movie removed from favorites!", "success");
+            window.location.reload();
+          })
+          .catch((error) => console.error("Error deleting movie:", error));
+      })
+      .catch((error) => console.error("Error fetching user data:", error));
+  };
 
   return (
     <div className="min-h-[calc(100vh-136px)] pt-10">

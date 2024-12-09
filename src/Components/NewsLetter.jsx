@@ -1,6 +1,6 @@
 function NewsLetter() {
   return (
-    <div className="px-5 pt-10 pb-10 grid lg:grid-cols-2 grid-cols-1 gap-5 bg-black rounded-box">
+    <div className="px-5 pt-10 pb-10 grid lg:grid-cols-2 grid-cols-1 gap-5 bg-black rounded-box text-white">
       <div className="flex justify-center">
         <img
           className="rounded-box"

@@ -1,11 +1,12 @@
 import { useContext } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
 
 function Navbar() {
   const { user, userSignOut } = useContext(AuthContext);
-  // console.log(user);
-  // console.log(user.displayName);
+
+  const location = useLocation();
+  console.log(location);
   const handleSignOut = () => {
     userSignOut()
       .then(() => {})
@@ -40,19 +41,62 @@ function Navbar() {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
             >
               <li>
-                <NavLink to="/">Home</NavLink>
+                <Link
+                  to="/"
+                  className={`${
+                    location.pathname === "/" ? "bg-primary" : "bg-transparent"
+                  }`}
+                >
+                  Home
+                </Link>
               </li>
               <li>
-                <NavLink to="/movies">All Movie</NavLink>
+                <Link
+                  to="/movies"
+                  className={`${
+                    location.pathname === "/movies"
+                      ? "bg-primary"
+                      : "bg-transparent"
+                  }`}
+                >
+                  All Movie
+                </Link>
               </li>
               <li>
-                <NavLink to="/movies/addmovie">Add Movie</NavLink>
+                <Link
+                  to="/movies/addmovie"
+                  className={`${
+                    location.pathname === "/movies/addmovie"
+                      ? "bg-primary"
+                      : "bg-transparent"
+                  }`}
+                >
+                  Add Movie
+                </Link>
               </li>
               <li>
-                <NavLink to="/movies/favoriteMovies">My Favorites</NavLink>
+                <Link
+                  to="/movies/favoriteMovies"
+                  className={`${
+                    location.pathname === "/movies/favoriteMovies"
+                      ? "bg-primary"
+                      : "bg-transparent"
+                  }`}
+                >
+                  My Favorites
+                </Link>
               </li>
               <li>
-                <NavLink to="/coming">Coming</NavLink>
+                <Link
+                  to="/coming"
+                  className={`${
+                    location.pathname === "/coming"
+                      ? "bg-primary"
+                      : "bg-transparent"
+                  }`}
+                >
+                  Coming
+                </Link>
               </li>
             </ul>
           </div>
@@ -63,19 +107,62 @@ function Navbar() {
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
             <li>
-              <NavLink to="/">Home</NavLink>
+              <Link
+                to="/"
+                className={`${
+                  location.pathname === "/" ? "bg-primary" : "bg-transparent"
+                }`}
+              >
+                Home
+              </Link>
             </li>
             <li>
-              <NavLink to="/movies">All Movie</NavLink>
+              <Link
+                to="/movies"
+                className={`${
+                  location.pathname === "/movies"
+                    ? "bg-primary"
+                    : "bg-transparent"
+                }`}
+              >
+                All Movie
+              </Link>
             </li>
             <li>
-              <NavLink to="/movies/addmovie">Add Movie</NavLink>
+              <Link
+                to="/movies/addmovie"
+                className={`${
+                  location.pathname === "/movies/addmovie"
+                    ? "bg-primary"
+                    : "bg-transparent"
+                }`}
+              >
+                Add Movie
+              </Link>
             </li>
             <li>
-              <NavLink to="/movies/favoriteMovies">My Favorites</NavLink>
+              <Link
+                to="/movies/favoriteMovies"
+                className={`${
+                  location.pathname === "/movies/favoriteMovies"
+                    ? "bg-primary"
+                    : "bg-transparent"
+                }`}
+              >
+                My Favorites
+              </Link>
             </li>
             <li>
-              <NavLink to="/coming">Coming</NavLink>
+              <Link
+                to="/coming"
+                className={`${
+                  location.pathname === "/coming"
+                    ? "bg-primary"
+                    : "bg-transparent"
+                }`}
+              >
+                Coming
+              </Link>
             </li>
           </ul>
         </div>

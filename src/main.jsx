@@ -14,31 +14,32 @@ import MovieDetail from "./Components/MovieDetail";
 import AllMovies from "./pages/AllMovies";
 import Error from "./pages/Error";
 import UpdateMovie from "./Components/UpdateMovie";
+import FavoriteMovies from "./Components/FavoriteMovies";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
     errorElement: <div>404</div>,
-    children: [
-      {
-        path: "/",
-        element: <div>Home</div>,
-      },
-      {
-        path: "/movies",
-        element: <div>All Movies</div>,
-      },
+    // children: [
+    //   {
+    //     path: "/",
+    //     element: <div>Home</div>,
+    //   },
+    //   {
+    //     path: "/movies",
+    //     element: <div>All Movies</div>,
+    //   },
 
-      {
-        path: "/favoriteMovies",
-        element: <div>Favorite Movies</div>,
-      },
-      {
-        path: "/coming",
-        element: <div>Coming</div>,
-      },
-    ],
+    //   {
+    //     path: "/favoriteMovies",
+    //     element: <div>Favorite Movies</div>,
+    //   },
+    //   {
+    //     path: "/coming",
+    //     element: <div>Coming</div>,
+    //   },
+    // ],
   },
   {
     path: "movies",
@@ -70,6 +71,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <UpdateMovie />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "favoriteMovies",
+        element: (
+          <PrivateRoute>
+            <FavoriteMovies />
           </PrivateRoute>
         ),
       },

@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
 import { Rating } from "react-simple-star-rating";
 
@@ -19,7 +19,8 @@ function MovieDetail() {
   // };
   const { id } = useParams();
   const [movie, setMovie] = useState({});
-  const { dbUser } = useContext(AuthContext);
+  const { dbUser, user } = useContext(AuthContext);
+  const navigate = useNavigate();
   useEffect(() => {
     fetch(`http://localhost:3000/movies/${id}`)
       .then((response) => response.json())
@@ -37,17 +38,53 @@ function MovieDetail() {
     summary,
   } = movie;
 
+  const [fetchedUser, setFetchedUser] = useState({});
   const handleFavorite = () => {
-    fetch(`http://localhost:3000/favorite`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(movie),
+    fetch(`http://localhost:3000/users/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        // Check if the user data and favoriteMovies exist
+        console.log(data);
+        if (data && data.favoriteMovies) {
+          // Create a new favoriteMovies array
+          const updatedFavorites = [...data.favoriteMovies, id];
+
+          // Update the user's favoriteMovies
+          const updatedUser = { ...data, favoriteMovies: updatedFavorites };
+
+          // Send the updated user data to the backend
+          fetch(`http://localhost:3000/users/${user.email}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedUser),
+          })
+            .then((res) => res.json())
+            .then(() => {
+              alert("Movie added to favorites!");
+              navigate("/movies");
+            })
+            .catch((error) => console.error("Error adding movie:", error));
+        } else {
+          console.error("Error: User data or favoriteMovies not found.");
+        }
+      })
+      .catch((error) => console.error("Error fetching user data:", error));
+  };
+
+  const handleDelete = () => {
+    fetch(`http://localhost:3000/movies/${id}`, {
+      method: "DELETE",
     })
       .then((response) => response.json())
-      .then((data) => console.log(data));
+      .then(() => {
+        // alert("Movie deleted successfully!");
+        navigate("/movies");
+      })
+      .catch((error) => console.error("Error deleting movie:", error));
   };
+
   return (
     <div className="card card-side bg-base-100 shadow-xl max-w-5xl mx-auto my-48">
       <figure className="w-1/2 rounded-box">
@@ -70,7 +107,9 @@ function MovieDetail() {
         </p>
 
         <div className="card-actions">
-          <button className="btn btn-primary">Delete</button>
+          <button className="btn btn-primary" onClick={handleDelete}>
+            Delete
+          </button>
           <button className="btn btn-primary" onClick={handleFavorite}>
             Favorite
           </button>

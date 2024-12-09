@@ -24,9 +24,9 @@ function MainLayout() {
       <section>
         <TestimonialSection />
       </section>
-      <section className="min-h-screen">
+      {/* <section className="min-h-screen">
         <Outlet />
-      </section>
+      </section> */}
       <section>
         <Footer />
       </section>

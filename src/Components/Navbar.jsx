@@ -46,7 +46,7 @@ function Navbar() {
                 <NavLink to="/movies/addmovie">Add Movie</NavLink>
               </li>
               <li>
-                <NavLink to="/favoriteMovies">My Favorites</NavLink>
+                <NavLink to="/movies/favoriteMovies">My Favorites</NavLink>
               </li>
               <li>
                 <NavLink to="/coming">Coming</NavLink>
@@ -69,7 +69,7 @@ function Navbar() {
               <NavLink to="/movies/addmovie">Add Movie</NavLink>
             </li>
             <li>
-              <NavLink to="/favoriteMovies">My Favorites</NavLink>
+              <NavLink to="/movies/favoriteMovies">My Favorites</NavLink>
             </li>
             <li>
               <NavLink to="/coming">Coming</NavLink>

@@ -5,10 +5,18 @@ import { FaFacebookF } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "../Context/AuthProvider";
+import { updateProfile } from "firebase/auth";
 function SignUp() {
   const navigate = useNavigate();
-  const { createNewUser, setUser, userGoogleSignIn, dbUser, setDbUser, user } =
-    useContext(AuthContext);
+  const {
+    createNewUser,
+    setUser,
+    userGoogleSignIn,
+    dbUser,
+    setDbUser,
+    user,
+    Auth,
+  } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -26,6 +34,15 @@ function SignUp() {
         console.log(result.user);
         setUser(result.user);
         addUserToDb(data, user);
+        updateProfile(Auth.currentUser, {
+          displayName: data.username,
+          photoURL: data.photoURL,
+        })
+          .then(() => {})
+          .catch((error) => {
+            // toast.error("Profile update failed!");
+            console.error("Error updating profile:", error);
+          });
         navigate("/");
       })
       .catch((error) => {

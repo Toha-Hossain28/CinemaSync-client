@@ -43,6 +43,7 @@ function AuthProvider({ children }) {
   };
 
   const authInfo = {
+    Auth,
     user,
     dbUser,
     setUser,

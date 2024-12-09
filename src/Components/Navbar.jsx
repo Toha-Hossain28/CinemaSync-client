@@ -5,11 +5,14 @@ import { AuthContext } from "../Context/AuthProvider";
 function Navbar() {
   const { user, userSignOut } = useContext(AuthContext);
   // console.log(user);
+  // console.log(user.displayName);
   const handleSignOut = () => {
     userSignOut()
       .then(() => {})
       .catch((error) => console.log(error));
   };
+
+  // console.log(databaseUser);
 
   return (
     <div className="px-5">
@@ -91,7 +94,7 @@ function Navbar() {
           </Link>
           <div
             className={`tooltip tooltip-left z-20 ${user ? "" : "hidden"}`}
-            data-tip={user?.email}
+            data-tip={user?.displayName}
           >
             <div className="flex justify-center items-center gap-5">
               <div className="dropdown dropdown-end">

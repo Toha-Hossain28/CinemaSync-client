@@ -15,6 +15,7 @@ import AllMovies from "./pages/AllMovies";
 import Error from "./pages/Error";
 import UpdateMovie from "./Components/UpdateMovie";
 import FavoriteMovies from "./Components/FavoriteMovies";
+import UpcomingMovies from "./Components/UpcomingMovies";
 
 const router = createBrowserRouter([
   {
@@ -81,6 +82,10 @@ const router = createBrowserRouter([
             <FavoriteMovies />
           </PrivateRoute>
         ),
+      },
+      {
+        path: "upcoming",
+        element: <UpcomingMovies />,
       },
     ],
   },

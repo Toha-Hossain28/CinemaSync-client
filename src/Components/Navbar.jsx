@@ -66,7 +66,7 @@ function Navbar() {
                 <Link
                   to="/movies/addmovie"
                   className={`${
-                    location.pathname === "/movies/addmovie"
+                    location.pathname.includes("addmovie")
                       ? "bg-primary"
                       : "bg-transparent"
                   }`}
@@ -78,7 +78,7 @@ function Navbar() {
                 <Link
                   to="/movies/favoriteMovies"
                   className={`${
-                    location.pathname === "/movies/favoriteMovies"
+                    location.pathname.includes("favoriteMovies")
                       ? "bg-primary"
                       : "bg-transparent"
                   }`}
@@ -88,9 +88,9 @@ function Navbar() {
               </li>
               <li>
                 <Link
-                  to="/coming"
+                  to="/movies/upcoming"
                   className={`${
-                    location.pathname === "/coming"
+                    location.pathname.includes("/coming")
                       ? "bg-primary"
                       : "bg-transparent"
                   }`}
@@ -132,7 +132,7 @@ function Navbar() {
               <Link
                 to="/movies/addmovie"
                 className={`${
-                  location.pathname === "/movies/addmovie"
+                  location.pathname.includes("addmovie")
                     ? "bg-primary"
                     : "bg-transparent"
                 }`}
@@ -144,7 +144,7 @@ function Navbar() {
               <Link
                 to="/movies/favoriteMovies"
                 className={`${
-                  location.pathname === "/movies/favoriteMovies"
+                  location.pathname.includes("favoriteMovies")
                     ? "bg-primary"
                     : "bg-transparent"
                 }`}
@@ -154,9 +154,9 @@ function Navbar() {
             </li>
             <li>
               <Link
-                to="/coming"
+                to="/movies/upcoming"
                 className={`${
-                  location.pathname === "/coming"
+                  location.pathname.includes("/upcoming")
                     ? "bg-primary"
                     : "bg-transparent"
                 }`}

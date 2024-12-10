@@ -33,9 +33,9 @@ const testimonials = [
 
 const TestimonialSection = () => {
   return (
-    <div className="bg-gradient-to-r from-evergreen to-deepOceanBlue text-white py-16 px-6">
+    <div className="py-16 px-6">
       <div className="text-center mb-10">
-        <h2 className="text-4xl font-bold">What Our Adventurers Say</h2>
+        <h2 className="text-4xl font-bold">What Our Partners Say</h2>
         <p className="mt-3 text-lg font-light">
           Real stories, genuine experiences.
         </p>

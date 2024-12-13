@@ -13,7 +13,7 @@ function Navbar() {
   }, [theme]);
 
   const location = useLocation();
-  console.log(location);
+  // console.log(location);
   const handleSignOut = () => {
     userSignOut()
       .then(() => {})

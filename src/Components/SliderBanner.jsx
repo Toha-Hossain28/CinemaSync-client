@@ -82,12 +82,14 @@ const movies = [
 
 function SliderBanner() {
   const [newMovies, setNewMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("https://movie-server-zeta.vercel.app/movies")
       .then((res) => res.json())
       .then((data) => {
         setNewMovies(data);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error.message);
@@ -95,6 +97,13 @@ function SliderBanner() {
   }, []);
   return (
     <div className="">
+      <div
+        className={`flex justify-center items-center ${
+          loading ? "" : "hidden"
+        }`}
+      >
+        <span className="loading loading-spinner loading-lg "></span>
+      </div>
       <Swiper
         slidesPerView={"auto"}
         centeredSlides={true}
@@ -103,7 +112,7 @@ function SliderBanner() {
           clickable: true,
         }}
         modules={[Pagination]}
-        className="mySwiper"
+        className={`mySwiper ${loading ? "hidden" : ""}`}
       >
         {newMovies.map((movie) => (
           <SwiperSlide key={movie._id}>

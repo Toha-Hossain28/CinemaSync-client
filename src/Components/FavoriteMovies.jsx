@@ -8,11 +8,15 @@ function FavoriteMovies() {
   const { user } = useContext(AuthContext);
   let [favMovies, setFavMovies] = useState([]);
   const [movieList, setMovieList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`https://movie-server-zeta.vercel.app/users/${user.email}`)
       .then((res) => res.json())
-      .then((data) => setFavMovies([...new Set(data.favoriteMovies)])) // Ensure no duplicates
+      .then((data) => {
+        setFavMovies([...new Set(data.favoriteMovies)]);
+        setLoading(false);
+      }) // Ensure no duplicates
       .catch((error) =>
         console.error("Error fetching favorite movies:", error)
       );
@@ -71,6 +75,13 @@ function FavoriteMovies() {
       <h1 className="text-3xl font-bold underline text-center pb-10">
         Favorite Movies
       </h1>
+      <div
+        className={`flex justify-center items-center ${
+          loading ? "" : "hidden"
+        }`}
+      >
+        <span className="loading loading-spinner loading-lg "></span>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-3/4 mx-auto">
         {movieList.map((movie) => (
           <div

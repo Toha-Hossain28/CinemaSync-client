@@ -100,7 +100,7 @@ const UpdateMovie = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Updated Movie:", formData);
+      // console.log("Updated Movie:", formData);
 
       // Update movie details in the database
       fetch(`https://movie-server-zeta.vercel.app/movies/${id}`, {

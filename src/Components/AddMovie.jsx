@@ -16,7 +16,7 @@ const AddMovie = () => {
     userEmail: user.email,
   });
 
-  console.log(user.email);
+  // console.log(user.email);
 
   const [errors, setErrors] = useState({});
   const genres = [
@@ -91,7 +91,7 @@ const AddMovie = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Movie Added:", formData);
+      // console.log("Movie Added:", formData);
 
       // send to database
       fetch("https://movie-server-zeta.vercel.app/movies", {
@@ -102,7 +102,9 @@ const AddMovie = () => {
         body: JSON.stringify(formData),
       })
         .then((response) => response.json())
-        .then((data) => console.log(data));
+        .then
+        // (data) => console.log(data)
+        ();
 
       // alert("Movie added successfully!");
       Swal.fire({

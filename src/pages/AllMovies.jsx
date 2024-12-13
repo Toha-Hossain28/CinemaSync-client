@@ -5,11 +5,15 @@ import { Rating } from "react-simple-star-rating";
 function AllMovies() {
   const [movies, setMovies] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("https://movie-server-zeta.vercel.app/movies")
       .then((response) => response.json())
-      .then((data) => setMovies(data))
+      .then((data) => {
+        setMovies(data);
+        setLoading(false);
+      })
       .catch((error) => console.error("Error fetching movies:", error));
   }, []);
 
@@ -48,6 +52,13 @@ function AllMovies() {
             </svg>
           </label>
         </div>
+        <div
+          className={`flex justify-center items-center ${
+            loading ? "" : "hidden"
+          }`}
+        >
+          <span className="loading loading-spinner loading-lg "></span>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-3/4 mx-auto">
           {filteredMovies.map((movie) => (
             <div
@@ -83,7 +94,7 @@ function AllMovies() {
             </div>
           ))}
         </div>
-        {filteredMovies.length === 0 && (
+        {filteredMovies.length === 0 && loading === false && (
           <p className="text-center text-gray-500">No movies found.</p>
         )}
       </section>

@@ -74,11 +74,15 @@ import { FaStar } from "react-icons/fa";
 // ];
 function FeaturedMovies() {
   const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("https://movie-server-zeta.vercel.app/movies")
       .then((response) => response.json())
-      .then((data) => setMovies(data));
+      .then((data) => {
+        setMovies(data);
+        setLoading(false);
+      });
   }, []);
 
   // sorting the movies based on rating and taking the first 6 Movie
@@ -100,6 +104,13 @@ function FeaturedMovies() {
       <div className="flex flex-col items-center space-y-4 mb-6">
         <h1 className="text-3xl font-bold mb-4">Featured Movies</h1>
         <p>Check out our featured movies below:</p>
+      </div>
+      <div
+        className={`flex justify-center items-center ${
+          loading ? "" : "hidden"
+        }`}
+      >
+        <span className="loading loading-spinner loading-lg "></span>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {sortedMovies.map((movie) => (

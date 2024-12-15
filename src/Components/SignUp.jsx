@@ -1,23 +1,13 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import { useForm } from "react-hook-form";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../Context/AuthProvider";
 import { updateProfile } from "firebase/auth";
 
 function SignUp() {
-  const navigate = useNavigate();
-  const {
-    createNewUser,
-    setUser,
-    userGoogleSignIn,
-    dbUser,
-    setDbUser,
-    user,
-    Auth,
-  } = useContext(AuthContext);
-
+  const location = useLocation();
   const {
     register,
     handleSubmit,
@@ -25,76 +15,122 @@ function SignUp() {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onSubmit = (data) => {
-    createNewUser(data.email, data.password)
-      .then((result) => {
-        setUser(result.user);
-        addUserToDb(data, user);
-        updateProfile(Auth.currentUser, {
-          displayName: data.username,
-          photoURL: data.photoURL,
-        })
-          .then(() => {})
-          .catch((error) => {
-            console.error("Error updating profile:", error);
-          });
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  };
-
-  const addUserToDb = (oldData, user) => {
-    const newData = {
-      ...oldData,
-      favoriteMovies: [],
-    };
-
-    fetch("https://movie-server-zeta.vercel.app/users", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(newData),
-    }).then((res) => res.json());
-  };
-
-  const handleGoogleSignIn = () => {
-    userGoogleSignIn()
-      .then((result) => {
-        setUser(result.user);
-        const data = {
-          email: result.user.email,
-          name: result.user.displayName,
-          username: result.user.displayName,
-          photoURL: result.user.photoURL,
-        };
-        updateDbUser(data.email);
-        if (!dbUser) {
-          addUserToDb(data, user);
-        }
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  };
+  const [dbUser, setDbUser] = useState(null);
+  const { createNewUser, setUser, userGoogleSignIn, user, Auth } =
+    useContext(AuthContext);
+  const navigate = useNavigate();
 
   const email = user?.email;
 
-  const updateDbUser = (email) => {
-    if (email) {
-      fetch(`https://movie-server-zeta.vercel.app/users/${email}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setDbUser(data);
-        });
-    }
+  // Reusable function: Add user to the database
+  const addUserToDb = (data) => {
+    const newUserData = {
+      ...data,
+      favoriteMovies: [],
+    };
+
+    return fetch("https://movie-server-zeta.vercel.app/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newUserData),
+    })
+      .then((res) => res.json())
+      .catch((error) => {
+        // console.error("Error adding user to the database:", error);
+      });
   };
 
+  // Reusable function: Fetch user from the database
+  const fetchUserFromDb = (email) => {
+    return fetch(`https://movie-server-zeta.vercel.app/users/${email}`)
+      .then((res) => res.json())
+      .catch((error) => {
+        // console.error("Error fetching user:", error);
+        return null;
+      });
+  };
+
+  // Form Submission: Sign up with email and password
+  const onSubmit = (data) => {
+    createNewUser(data.email, data.password)
+      .then((result) => {
+        const newUser = result.user;
+        setUser(newUser);
+
+        // Add user to the database
+        addUserToDb(data)
+          .then(() => {
+            // console.log("User added to the database successfully.");
+          })
+          .catch((error) => {
+            // console.error("Error adding user to the database:", error);
+          });
+
+        // Update Firebase profile
+        updateProfile(newUser, {
+          displayName: data.username,
+          photoURL: data.photoURL,
+        })
+          .then(() => {
+            // console.log("Profile updated successfully.");
+          })
+          .catch((error) => {
+            // console.error("Error updating profile:", error);
+          });
+
+        navigate(location.state ? location.state : "/");
+      })
+      .catch((error) => {
+        // console.error("Error creating user:", error.message);
+      });
+  };
+
+  // Google Sign-In
+  const handleGoogleSignIn = () => {
+    userGoogleSignIn()
+      .then((result) => {
+        const newUser = result.user;
+        setUser(newUser);
+
+        // Check if the user exists in the database
+        fetchUserFromDb(newUser.email).then((existingUser) => {
+          if (!existingUser) {
+            // Add user to the database if not already present
+            const data = {
+              email: newUser.email,
+              name: newUser.displayName,
+              username: newUser.displayName,
+              photoURL: newUser.photoURL,
+            };
+            addUserToDb(data)
+              .then(() => {
+                // console.log("Google user added to the database successfully.");
+              })
+              .catch((error) => {
+                // console.error(
+                //   "Error adding Google user to the database:",
+                //   error
+                // );
+              });
+          } else {
+            // console.log("Google user already exists in the database.");
+          }
+        });
+
+        navigate(location.state ? location.state : "/");
+      })
+      .catch((error) => {
+        // console.error("Error during Google Sign-In:", error.message);
+      });
+  };
+
+  // Update database user on user state change
   useEffect(() => {
-    updateDbUser(email);
+    if (email) {
+      fetchUserFromDb(email).then((data) => setDbUser(data));
+    }
   }, [email]);
 
   return (

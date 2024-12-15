@@ -187,7 +187,7 @@ function Navbar() {
               {/* this hidden checkbox controls the state */}
               <input
                 type="checkbox"
-                onClick={handleTheme}
+                onChange={handleTheme}
                 checked={theme === "dark" ? true : false}
               />
 

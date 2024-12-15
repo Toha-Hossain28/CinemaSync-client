@@ -20,13 +20,15 @@ function MovieDetail() {
   // };
   const { id } = useParams();
   const [movie, setMovie] = useState({});
-  const { dbUser, user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [favLoading, setFavLoading] = useState(false);
+
   useEffect(() => {
     fetch(`https://movie-server-zeta.vercel.app/movies/${id}`)
       .then((response) => response.json())
-      .then((data) => setMovie(data));
-    // console.log(movie);
+      .then((data) => setMovie(data))
+      .catch((error) => console.error("Error fetching movie details:", error));
   }, [id]);
 
   const {
@@ -40,38 +42,51 @@ function MovieDetail() {
   } = movie;
 
   const handleFavorite = () => {
+    setFavLoading(true);
+
     fetch(`https://movie-server-zeta.vercel.app/users/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         // Check if the user data and favoriteMovies exist
-        // console.log(data);
         if (data && data.favoriteMovies) {
-          // Create a new favoriteMovies array
-          const updatedFavorites = [...data.favoriteMovies, id];
+          // Check if the movie is already in the favoriteMovies array
+          if (data.favoriteMovies.includes(id)) {
+            setFavLoading(false);
+            Swal.fire("Info", "Movie is already in your favorites!", "info");
+          } else {
+            // Add the movie ID to the favoriteMovies array
+            const updatedFavorites = [...data.favoriteMovies, id];
 
-          // Update the user's favoriteMovies
-          const updatedUser = { ...data, favoriteMovies: updatedFavorites };
-
-          // Send the updated user data to the backend
-          fetch(`https://movie-server-zeta.vercel.app/users/${user.email}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedUser),
-          })
-            .then((res) => res.json())
-            .then(() => {
-              // alert("Movie added to favorites!");
-              Swal.fire("Success", "Movie added to favorites!", "success");
-              // navigate("/movies");
+            // Update the user's favoriteMovies in the backend
+            fetch(`https://movie-server-zeta.vercel.app/users/${user.email}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                ...data,
+                favoriteMovies: updatedFavorites,
+              }),
             })
-            .catch((error) => console.error("Error adding movie:", error));
+              .then((res) => res.json())
+              .then(() => {
+                setFavLoading(false);
+                Swal.fire("Success", "Movie added to favorites!", "success");
+              })
+              .catch((error) => {
+                setFavLoading(false);
+                console.error("Error adding movie to favorites:", error);
+              });
+          }
         } else {
           console.error("Error: User data or favoriteMovies not found.");
+          setFavLoading(false);
         }
       })
-      .catch((error) => console.error("Error fetching user data:", error));
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+        setFavLoading(false);
+      });
   };
 
   const handleDelete = () => {
@@ -80,7 +95,6 @@ function MovieDetail() {
     })
       .then((response) => response.json())
       .then(() => {
-        // alert("Movie deleted successfully!");
         Swal.fire("Success", "Movie deleted successfully!", "success");
         navigate("/movies");
       })
@@ -121,7 +135,11 @@ function MovieDetail() {
               Delete
             </button>
             <button className="btn btn-primary" onClick={handleFavorite}>
-              Favorite
+              {favLoading ? (
+                <span className="loading loading-spinner"></span>
+              ) : (
+                "Favorite"
+              )}
             </button>
             <Link to={`/movies/update/${id}`} className="btn btn-primary">
               Update

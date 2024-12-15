@@ -2,15 +2,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import { useForm } from "react-hook-form";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../Context/AuthProvider";
 import Swal from "sweetalert2";
 
 function SignIn() {
-  const { setUser, userSignIn, userGoogleSignIn, setDbUser, dbUser, user } =
-    useContext(AuthContext);
-  const location = useLocation();
-  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -18,83 +14,107 @@ function SignIn() {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onSubmit = (data) => {
-    // console.log(data);
-    userSignIn(data.email, data.password)
-      .then((result) => {
-        // console.log(result.user);
-        setUser(result.user);
-        navigate(location.state ? location.state : "/");
-      })
-      .catch((error) => {
-        console.log(error.message);
-        Swal.fire("Error", error.message, "error");
-      });
+  const { setUser, userSignIn, userGoogleSignIn, setDbUser, dbUser, user } =
+    useContext(AuthContext);
 
-    // dbUser loading
-    fetch(`https://movie-server-zeta.vercel.app/users/${data.email}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setDbUser(data);
-      });
-  };
-  // console.log("debuser", dbUser);
-  const addUserToDb = (oldData, user) => {
-    // user with favorite movie array
+  const navigate = useNavigate();
+  const location = useLocation();
+  const email = user?.email;
+
+  // Function to add user to the database
+  const addUserToDb = (data) => {
     const newData = {
-      ...oldData,
+      ...data,
       favoriteMovies: [],
     };
 
-    // console.log(newData);
-
-    // add user to database
-    fetch("https://movie-server-zeta.vercel.app/users", {
+    return fetch("https://movie-server-zeta.vercel.app/users", {
       method: "POST",
       headers: {
-        "content-type": "application/json",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(newData),
-    })
-      .then((res) => res.json())
-      .then((data) => {});
+    }).then((res) => res.json());
   };
 
-  const handleGoogleSignIn = () => {
-    userGoogleSignIn()
+  // Function to fetch a user from the database
+  const fetchUserFromDb = async (email) => {
+    try {
+      const res = await fetch(
+        `https://movie-server-zeta.vercel.app/users/${email}`
+      );
+      if (!res.ok) throw new Error("Failed to fetch user");
+      return await res.json();
+    } catch (error) {
+      // console.error("Error fetching user from DB:", error.message);
+      return null;
+    }
+  };
+
+  // Email and password sign-in
+  const onSubmit = (data) => {
+    userSignIn(data.email, data.password)
       .then((result) => {
-        // console.log(result.user);
         setUser(result.user);
-        const data = {
-          email: result.user.email,
-          name: result.user.displayName,
-          username: result.user.displayName,
-          photoURL: result.user.photoURL,
-        };
-        // console.log(data);
-        updateDbUser(data.email);
-        if (!dbUser) {
-          addUserToDb(data, user);
-        }
-        navigate("/");
+
+        // Fetch and set database user
+        fetchUserFromDb(data.email).then((dbUserData) => {
+          if (dbUserData) {
+            setDbUser(dbUserData);
+          } else {
+            Swal.fire("Error", "User not found in database.", "error");
+          }
+        });
+
+        // Redirect to the target location
+        navigate(location.state ? location.state : "/");
       })
       .catch((error) => {
-        console.log(error.message);
+        // console.error("Error signing in:", error.message);
         Swal.fire("Error", error.message, "error");
       });
   };
 
-  const email = user?.email;
-  const updateDbUser = (email) => {
-    if (email) {
-      fetch(`https://movie-server-zeta.vercel.app/users/${email}`)
-        .then((res) => res.json())
-        .then((data) => {
-          // console.log(data);
-          setDbUser(data);
-        });
+  // Google Sign-In
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await userGoogleSignIn();
+      const googleUser = result.user;
+
+      setUser(googleUser);
+
+      const userData = {
+        email: googleUser.email,
+        name: googleUser.displayName,
+        username: googleUser.displayName,
+        photoURL: googleUser.photoURL,
+      };
+
+      // Check if the user already exists in the database
+      const existingUser = await fetchUserFromDb(googleUser.email);
+
+      if (!existingUser) {
+        // Add user to the database if not found
+        await addUserToDb(userData);
+        // console.log("Google user added to the database.");
+      } else {
+        // console.log("Google user already exists in the database.");
+        setDbUser(existingUser);
+      }
+
+      navigate(location.state ? location.state : "/");
+    } catch (error) {
+      // console.error("Error during Google Sign-In:", error.message);
+      Swal.fire("Error", error.message, "error");
     }
   };
+
+  // Update database user whenever `email` changes
+  useEffect(() => {
+    if (email) {
+      fetchUserFromDb(email).then((data) => setDbUser(data));
+    }
+  }, [email]);
 
   return (
     <div className="w-full grid place-items-center py-10">
@@ -142,7 +162,11 @@ function SignIn() {
         <div className="text-center">
           <p className="text-sm">
             Don&apos;t have an account?{" "}
-            <Link to="/auth/signup" className="link link-hover text-accent">
+            <Link
+              to="/auth/signup"
+              state={location.state}
+              className="link link-hover text-accent"
+            >
               Sign up
             </Link>
           </p>

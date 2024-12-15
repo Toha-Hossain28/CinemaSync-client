@@ -10,6 +10,8 @@ function FavoriteMovies() {
   const [movieList, setMovieList] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     fetch(`https://movie-server-zeta.vercel.app/users/${user.email}`)
       .then((res) => res.json())
@@ -42,15 +44,18 @@ function FavoriteMovies() {
     if (favMovies.length > 0) {
       fetchMovies();
     }
-  }, [favMovies]);
+  }, [favMovies, loading, movieList]);
 
   const handleDelete = (movieId) => {
+    setLoading(true);
     fetch(`https://movie-server-zeta.vercel.app/users/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         const updatedFavorites = data.favoriteMovies.filter(
           (id) => id !== movieId
         );
+        setMovieList(updatedFavorites);
+
         const updatedUser = { ...data, favoriteMovies: updatedFavorites };
         fetch(`https://movie-server-zeta.vercel.app/users/${user.email}`, {
           method: "PUT",
@@ -64,10 +69,13 @@ function FavoriteMovies() {
             // alert("Movie removed from favorites!");
             Swal.fire("Success", "Movie removed from favorites!", "success");
             setFavMovies(updatedFavorites);
+            setLoading(false);
+            navigate("/movies");
           })
           .catch((error) => console.error("Error deleting movie:", error));
       })
       .catch((error) => console.error("Error fetching user data:", error));
+    // refresh the page
   };
 
   return (
@@ -82,7 +90,15 @@ function FavoriteMovies() {
       >
         <span className="loading loading-spinner loading-lg "></span>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-3/4 mx-auto">
+      {loading && <p>Loading favorite movies...</p>}
+      {!loading && movieList.length === 0 && (
+        <p>You have no favorite movies.</p>
+      )}
+      <div
+        className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-3/4 mx-auto ${
+          loading ? "hidden" : ""
+        }`}
+      >
         {movieList.map((movie) => (
           <div
             key={movie._id}
